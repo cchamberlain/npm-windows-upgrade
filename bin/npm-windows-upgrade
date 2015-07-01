@@ -24,7 +24,7 @@ function runPowershell(version, nodePath, cb) {
     var output = [];
 
     if(nodePath)
-      console.log('powershell executed with node path arg: ' + nodePathArg);
+      console.log('powershell executed with args: ' + psArgs.join(' '));
 
     child.stdout.on('data', function (data) {
         output.push(data.toString());
