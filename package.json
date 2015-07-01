@@ -1,6 +1,6 @@
 {
   "name": "npm-windows-upgrade-portable",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "preferGlobal": "true",
   "bin": {
@@ -40,5 +40,6 @@
     "cli-spinner": "^0.2.1",
     "inquirer": "^0.8.5",
     "prompt": "^0.2.14"
-  }
+  },
+  "scripts": {}
 }
