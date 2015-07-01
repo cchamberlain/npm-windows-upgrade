@@ -70,7 +70,8 @@ function getNodePath(cb) {
       console.log('Could not determine nodejs install location, will default to a program files directory.');
       cb(null);
     } else {
-      cb(stdout);
+      var nodePath = stdout.replace(/\n/, '');
+      cb(nodePath);
     }
   });
 }
