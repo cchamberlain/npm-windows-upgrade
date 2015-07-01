@@ -17,6 +17,9 @@ function runPowershell(version, nodePath, cb) {
         child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\' ' + nodePathArg + ' }']),
         output = [];
 
+    if(nodePath)
+      console.log('powershell executed with node path arg: ' + nodePathArg);
+
     child.stdout.on('data', function (data) {
         output.push(data.toString());
     });
