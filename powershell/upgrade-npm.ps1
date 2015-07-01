@@ -11,7 +11,7 @@
 Param(
     [Parameter(Mandatory=$True)]
     [string]$version,
-    [string]$NodePath=Join-Path $env:ProgramFiles nodejs
+    [string]$NodePath=(Join-Path $env:ProgramFiles nodejs)
 )
 
 $ErrorActionPreference = "Stop"
