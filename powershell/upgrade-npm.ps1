@@ -16,6 +16,8 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
+"PowerShell received $NodePath as the nodejs path."
+
 #
 # Self-Elevate
 #

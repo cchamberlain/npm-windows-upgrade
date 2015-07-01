@@ -12,10 +12,16 @@ var spawn = require('child_process').spawn,
 
 // Helper functions
 function runPowershell(version, nodePath, cb) {
-    var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-        nodePathArg = nodePath == null ? '' : '-NodePath \'' + nodePath + '\'',
-        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\' ' + nodePathArg + ' }']),
-        output = [];
+    var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1');
+
+    var specialArgs = nodePath == null ?
+      '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' :
+      '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath \'' + nodePath + '\' }';
+
+    var psArgs = ['-NoProfile', '-NoLogo', specialArgs];
+    var child = spawn('powershell.exe', psArgs);
+
+    var output = [];
 
     if(nodePath)
       console.log('powershell executed with node path arg: ' + nodePathArg);
