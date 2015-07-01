@@ -50,7 +50,8 @@ if (!(IsAdministrator))
 #
 # Upgrade
 #
-$NodePath = npm config -g get prefix
+$NpmParams = "config -g get prefix"
+$NodePath = & "npm" $NpmParams
 if ((Test-Path $NodePath) -ne $True) {
   $NodePath = $env:ProgramFiles + "\nodejs"
   if ((Test-Path $NodePath) -ne $True) {
