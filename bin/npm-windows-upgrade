@@ -11,9 +11,10 @@ var spawn = require('child_process').spawn,
     args = process.argv;
 
 // Helper functions
-function runPowershell(version, cb) {
+function runPowershell(version, nodePath, cb) {
     var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\'}']),
+        nodePathArg = nodePath == null ? '' : '-NodePath \'' + nodePath + '\'',
+        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\' ' + nodePathArg + ' }']),
         output = [];
 
     child.stdout.on('data', function (data) {
@@ -32,10 +33,12 @@ function runPowershell(version, cb) {
     child.stdin.end();
 }
 
+
+
 function getAvailableVersions(cb) {
     exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
-            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-upgrade-windows --version:3.0.0'));
+            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-windows-upgrade --version:3.0.0'));
         }
 
         cb(JSON.parse(stdout));
@@ -52,11 +55,23 @@ function checkForInternet(cb) {
     });
 }
 
+function getNodePath(cb) {
+  exec('npm config --global get prefix', function(err, stdout) {
+    if (err) {
+      console.log('Could not determine nodejs install location, will default to a program files directory.');
+      cb(null);
+    } else {
+      cb(stdout);
+    }
+  });
+}
+
 function upgradeNPM(version) {
     var spinner = new Spinner('Upgrading.. %s');
     spinner.start();
 
-    runPowershell(version, function (output) {
+    getNodePath(function(nodePath) {
+      runPowershell(version, nodePath, function (output) {
         spinner.stop(false);
         console.log('\n');
 
@@ -68,7 +83,8 @@ function upgradeNPM(version) {
             console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
             console.log(output);
         }
-    });
+      });
+  });
 }
 
 function checkExecutionPolicy(cb) {
@@ -109,7 +125,7 @@ if (!isWin) {
 }
 
 // Print version
-console.log(chalk.yellow.bold('npm-upgrade-windows ' + package.version));
+console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
 
 // Execute
 inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade npm. Do you want to continue?'}, function (response) {

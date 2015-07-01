@@ -10,7 +10,8 @@
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
-    [string]$version
+    [string]$version,
+    [string]$NodePath=Join-Path $env:ProgramFiles nodejs
 )
 
 $ErrorActionPreference = "Stop"
@@ -50,13 +51,8 @@ if (!(IsAdministrator))
 #
 # Upgrade
 #
-$NpmParams = "config -g get prefix"
-$NodePath = & "npm" $NpmParams
 if ((Test-Path $NodePath) -ne $True) {
-  $NodePath = $env:ProgramFiles + "\nodejs"
-  if ((Test-Path $NodePath) -ne $True) {
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
-  }
 }
 
 $NpmPath = $NodePath + "\node_modules\npm"
