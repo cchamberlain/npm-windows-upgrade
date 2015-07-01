@@ -82,7 +82,7 @@ if (Test-Path $NpmPath)
     # Upgrade npm
     cd $NodePath
     "Upgrading npm in " + $NodePath
-    npm install npm@$version
+    .\npm install npm@$version
 
     # Copy .npmrc back
     if ($Npmrc)
